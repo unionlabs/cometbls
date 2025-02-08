@@ -28,7 +28,7 @@ try to cherry-pick the pull request to the backport branch. If the bot fails to
 backport, it will open a pull request. The author of the original pull request
 is responsible for solving the conflicts and merging the pull request.
 
-### Creating a backport branch
+### Creating A Backport Branch
 
 If this is the first release candidate for a major version release, e.g. v2.0.0,
 you get to have the honor of creating the backport branch!
@@ -117,7 +117,7 @@ After doing these steps, go back to `main` and do the following:
 
 [e2e]: https://github.com/cometbft/cometbft/blob/main/.github/workflows/e2e-nightly-main.yml
 
-## Pre-releases
+## Pre-Releases
 
 Before creating an official release, especially a major release, we may want to
 create an alpha or beta version, or release candidate (RC) for our friends and
@@ -189,7 +189,7 @@ backport branch (see above). Otherwise:
    Now the tag should be available on the repo's releases page.
 10. Future pre-releases will continue to be built off of this branch.
 
-## Major release
+## Major Release
 
 This major release process assumes that this release was preceded by release
 candidates. If there were no release candidates, begin by creating a backport
@@ -207,7 +207,7 @@ Before performing these steps, be sure the
      and `go mod tidy` (to update `go.sum`) so that it points to one. You may need to tag a new version of the api
      if the last released version is too old (i.e., it does not contain the latest
      changes to the protos). If that is the case:
-     * `git tag -a api/v2.0.0 -s -m "Release api module v2.0.0" origin/v2.x`
+     * `git tag -a api/v2.0.0 -s -m "Release api module v2.0.0" origin/v2.x"`
      * `git push origin api/v2.0.0`
      * Notice the prefix `api/`, which denotes that the version refers to the `api` module.
    * Do a [release][unclog-release] with [unclog] for the desired version,
@@ -222,12 +222,12 @@ Before performing these steps, be sure the
 4. Open a PR with these changes against the backport branch.
 5. Once these changes are on the backport branch, push a tag with prepared
    release details. This will trigger the actual release `v2.0.0`.
-   * `git tag -a v2.0.0 -s -m 'Release v2.0.0'`
+   * `git tag -a v2.0.0 -s -m "Release v2.0.0"`
    * `git push origin v2.0.0`
 6. Make sure that `main` is updated with the latest `CHANGELOG.md`,
    `CHANGELOG_PENDING.md`, and `UPGRADING.md`.
 
-## Minor and patch releases
+## Minor and Patch Releases
 
 Minor and patch releases are done differently from major releases: they are
 built off of long-lived backport branches, rather than from `main`.  As
@@ -381,7 +381,7 @@ blocksync to the head of the chain and begins producing blocks using consensus
 it is stopped. Once stopped, a new node is started and takes its place. This
 network is run for several days.
 
-#### Vote-extension Testnet
+#### Vote-Extension Testnet
 
 CometBFT v0.38.0 introduced **vote-extensions**, which are added as the name
 suggests, to precommit votes sent by validators. The Vote-extension Testnet is
