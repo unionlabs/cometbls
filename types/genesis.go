@@ -17,7 +17,7 @@ import (
 
 const (
 	// MaxChainIDLen is a maximum length of the chain ID.
-	MaxChainIDLen = 50
+	MaxChainIDLen = 31
 )
 
 //------------------------------------------------------------

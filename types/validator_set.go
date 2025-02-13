@@ -10,10 +10,12 @@ import (
 	"sort"
 	"strings"
 
+	cometbn254 "github.com/cometbft/cometbft/crypto/bn254"
 	"github.com/cometbft/cometbft/crypto/merkle"
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	cmtmath "github.com/cometbft/cometbft/libs/math"
 	cmtproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	"github.com/consensys/gnark-crypto/ecc/bn254"
 )
 
 const (
@@ -358,16 +360,38 @@ func (vals *ValidatorSet) findProposer() *Validator {
 	return proposer
 }
 
-// Hash returns the Merkle root hash build using validators (as leaves) in the
+// HashSha256 returns the Merkle root hash build using validators (as leaves) in the
 // set.
 //
 // See merkle.HashFromByteSlices.
-func (vals *ValidatorSet) Hash() []byte {
+func (vals *ValidatorSet) HashSha256() []byte {
 	bzs := make([][]byte, len(vals.Validators))
 	for i, val := range vals.Validators {
 		bzs[i] = val.Bytes()
 	}
 	return merkle.HashFromByteSlices(bzs)
+}
+
+// Hash returns the Merkle root hash build using validators (as leaves) in the
+// set.
+func (vals *ValidatorSet) Hash() []byte {
+	bzs := make([][]byte, len(vals.Validators))
+	for i, val := range vals.Validators {
+		var pubKey bn254.G1Affine
+		_, err := pubKey.SetBytes(val.PubKey.Bytes())
+		if err != nil {
+			panic(fmt.Errorf("ValidatorSet.Hash(): impossible invalid validator: %v: Err %s", val, err))
+		}
+		leaf, err := cometbn254.NewMerkleLeaf(pubKey, val.VotingPower)
+		if err != nil {
+			panic(fmt.Errorf("ValidatorSet.Hash(): impossible merkle leaf creation: %v", err))
+		}
+		bzs[i], err = leaf.Hash()
+		if err != nil {
+			panic(fmt.Errorf("ValidatorSet.Hash(): impossible merkle leaf hash: %v", err))
+		}
+	}
+	return merkle.MimcHashFromByteSlices(bzs)
 }
 
 // ProposerPriorityHash returns the tmhash of the proposer priorities.
